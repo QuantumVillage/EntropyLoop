@@ -1,0 +1,28 @@
+Drill report for EntropyLoop-v1.kicad_pcb
+Created on 2026-03-23T09:41:53+0000
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L1 :  B.Cu                      back
+
+
+Drill file 'EntropyLoop-v1-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.800mm  0.0315"  (6 holes)
+    T2  0.900mm  0.0354"  (18 holes)
+    T3  1.000mm  0.0394"  (44 holes)
+    T4  1.500mm  0.0591"  (2 holes)
+    T5  2.000mm  0.0787"  (4 holes)
+
+    Total plated holes count 74
+
+
+Drill file 'EntropyLoop-v1-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  1.850mm  0.0728"  (2 holes)
+    T2  2.200mm  0.0866"  (2 holes)
+
+    Total unplated holes count 4
