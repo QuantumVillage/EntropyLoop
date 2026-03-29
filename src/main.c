@@ -50,13 +50,13 @@ void crypto_hash(const unsigned char *input, size_t ilen, unsigned char *output)
 }
 
 void core1_entry() {
-    adc_batch_t batch;
+    static adc_batch_t batch;
     uint8_t hash_out_1[64];
     uint8_t hash_out_2[64];
     
     // Histogram for Min-Entropy
-    // IMPORTANT: uint16_t to prevent overflow with 1024 samples
-    uint16_t counts[4096]; 
+    // Moved to static to prevent Core 1 stack overflow (Default stack is 2KB)
+    static uint16_t counts[4096]; 
 
     // --- RING BUFFER HISTORY ---
     // We store the last 'LAG_DEPTH' samples here.
@@ -80,7 +80,7 @@ void core1_entry() {
 
         for(int i = 0; i < BATCH_SIZE; i++) {
             // Mask to ensure we only look at 12 bits
-            uint16_t val = batch.samples[i];
+            uint16_t val = batch.samples[i] & 0xFFF;
             
             // --- Update Min/Max (Raw Data) ---
             if (val < min_val) min_val = val;
@@ -99,7 +99,7 @@ void core1_entry() {
 
             // 4. Calculate Delta against the OLD value
             // We add 2048 to center the result.
-            uint16_t delta = (val - old_val + 2048);
+            uint16_t delta = (val - old_val + 2048) & 0xFFF;
             // -------------------------------------
 
             // Update Histogram using DELTA
@@ -143,7 +143,10 @@ int main() {
     vreg_set_voltage(VREG_VOLTAGE_1_25);
     sleep_ms(10);
     set_sys_clock_khz(TARGET_FREQ_KHZ, true);
+    // reinit USB/UART
     stdio_init_all();
+    // Uncomment to wait for connection...
+    // while (!stdio_usb_connected()) sleep_ms(100);
 
     // 2. Setup Inter-core Queue
     queue_init(&sample_queue, sizeof(adc_batch_t), 4);
@@ -166,7 +169,7 @@ int main() {
     printf("Core 1: Processing Entropy & Hashing.\n");
 
     // 6. Main Loop
-    adc_batch_t current_batch;
+    static adc_batch_t current_batch;
     
     while (true) {
         for(int i = 0; i < BATCH_SIZE; i++) {
