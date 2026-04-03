@@ -12,7 +12,7 @@
 
 QV is pleased to be releasing the ‘Entropy Loop’ for world Quantum Day on April 14th 2026: This is a USD $35 open source Quantum Random Number Generator made using off the shelf fibre optics and a raspberry pi pico. 
 
-Entropy is fast becoming a fundamental resource, especially as AI, cryptography, and computing in general are all changing and accelerating in reach and usefulness. We believe the best way to democratize this technology is to open source a ‘strong minimal viable example’, as we did with quantum sensing, and provide a fully working off the shelf BOM with firmware that passes all major entropy quality tests. This project also serves as an educational/informational demonstration of the benefits of Quantum RNG over regular TRNG and (CS)PRNG technologies.
+Entropy is fast becoming a fundamental resource, especially as AI, simulations, optimizers, cryptography, and computing in general are all changing and accelerating in reach and usefulness. We believe the best way to democratize this technology is to open source a ‘strong minimal viable example’, as we did with quantum sensing, and provide a fully working off the shelf BOM with firmware that passes all major entropy quality tests. This project also serves as an educational/informational demonstration of the benefits of Quantum RNG over regular TRNG and (CS)PRNG technologies.
 
 ## Randomness from Vacuum Fluctuations
 
