@@ -222,6 +222,11 @@ We will just use the `RD+` and `TD+` pins for Rx/Tx respectively. Note that you 
 
 ### Build Overview
 
+If you are using the PCB design, you should end up with something that resembles these examples (credit-card for size):
+
+![Front](images/pcb-1.jpg)
+![Back](images/pcb-2.jpg)
+
 The Pi Pico uses `ADC0` for Rx and `GPIO0` for Tx - with the 3.3V supply and GND pins powering the units. The overall wiring looks like this from below:
 
 ![wiring1](images/20260203_150119-EDIT.jpg)
