@@ -144,8 +144,8 @@ def main():
             current_batch.append(val)
             
             # Jitter: busy_wait_us_32(1 + (adc_read() & 0x03))
-            jitter_read = adc.read_u16()
-            time.sleep_us(1 + (jitter_read & 0x03))
+            # jitter_read = adc.read_u16()
+            # time.sleep_us(1 + (jitter_read & 0x03))
             
         with queue_lock:
             # Simple flow control to prevent OOM if Core 1 is slow
