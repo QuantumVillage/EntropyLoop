@@ -26,6 +26,8 @@ We can send these pulses into an optical fiber network, and split the pulse so t
 
 The fact that each of these have different phase and polarization properties, and randomly so, means that their interactions are fundamentally chaotic and random. This is great, for a QRNG - and so this is what we estimate and measure. You can see examples of the pulses below. 
 
+**Coming Soon** - we want to illustrate a few key use cases for quantum entropy; AI, Simulations, and ART!
+
 Details for the background physics maybe found in the paper [Ultra-fast quantum randomness generation by accelerated phase diffusion in a pulsed laser diode](https://opg.optica.org/oe/fulltext.cfm?uri=oe-22-2-1645) by Abellán et al.
 
 ## Build Instructions
