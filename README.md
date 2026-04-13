@@ -24,6 +24,10 @@ The fact that each of these are different, and randomly so, means that their int
 
 Details maybe found in the paper [Ultra-fast quantum randomness generation by accelerated phase diffusion in a pulsed laser diode](https://opg.optica.org/oe/fulltext.cfm?uri=oe-22-2-1645) by Abellán et al.
 
+## Build Instructions
+
+If you would like to jump to our build guide for the Entropy Loop, take a look at [BUILD.md](BUILD.md). 
+
 ## System Overview
 
 Here's an overview flowchart of what's going on in this system:
