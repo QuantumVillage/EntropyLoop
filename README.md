@@ -469,6 +469,12 @@ H_min: 6.4000 | R: 1855 | Data:
 
 This project has showed the potential for low cost, high performance, field-ready designs for PD-QRNG.
 
+## Acknowledgements 
+
+This project was supported by a grant from the Mozilla Foundation to whom we are very greatful.
+
+![MozillaLogo](images/MoFo_PrimaryLogo_Light_RGB.png)
+
 ## References
 
 The primary reference is Abellán et al. "Ultrafast Quantum Randomness Generation by Accelerated Phase Diffusion in a pulsed laser diode", 2014, link: https://opg.optica.org/oe/fulltext.cfm?uri=oe-22-2-1645.
