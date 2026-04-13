@@ -471,7 +471,7 @@ This project has showed the potential for low cost, high performance, field-read
 
 ## Acknowledgements 
 
-This project was supported by a grant from the Mozilla Foundation to whom we are very greatful.
+This project was supported by a grant from the Mozilla Foundation to whom we are very grateful.
 
 ![MozillaLogo](images/MoFo_PrimaryLogo_Light_CMYK.jpg)
 
