@@ -14,6 +14,8 @@ QV is pleased to be releasing the ‘Entropy Loop’ for world Quantum Day on Ap
 
 Entropy is fast becoming a fundamental resource, especially as AI, simulations, optimizers, cryptography, and computing in general are all changing and accelerating in reach and usefulness. We believe the best way to democratize this technology is to open source a ‘strong minimal viable example’, as we did with quantum sensing, and provide a fully working off the shelf BOM with firmware that passes all major entropy quality tests. This project also serves as an educational/informational demonstration of the benefits of Quantum RNG over regular TRNG and (CS)PRNG technologies.
 
+**Coming Soon** - We want to illustrate a few key use cases for quantum entropy; AI, Simulations, and ART!
+
 Here's what the completed build looks like:
 
 ![Completed Build Image](images/assembly-3.jpg)
@@ -25,8 +27,6 @@ When a laser diode powers up, there are quantum fluctuations that occur that lat
 We can send these pulses into an optical fiber network, and split the pulse so that ~50% goes straight over to the detector, and the rest gets sent to a delay line - here, we use 5m length of fiber as our photonic delay line. 5m is long enough that with the timing of our pulses (roughly every 24ns, @ 42MHz) the pulse travelling over the delay loop will interact with the next pulse from the laser diode. 
 
 The fact that each of these have different phase and polarization properties, and randomly so, means that their interactions are fundamentally chaotic and random. This is great, for a QRNG - and so this is what we estimate and measure. You can see examples of the pulses below. 
-
-**Coming Soon** - we want to illustrate a few key use cases for quantum entropy; AI, Simulations, and ART!
 
 Details for the background physics maybe found in the paper [Ultra-fast quantum randomness generation by accelerated phase diffusion in a pulsed laser diode](https://opg.optica.org/oe/fulltext.cfm?uri=oe-22-2-1645) by Abellán et al.
 
