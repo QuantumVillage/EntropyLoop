@@ -163,7 +163,7 @@ This is a sketch overview of the RPi pico driver, laser/PD and splitter setup. T
 
 This is what the system looks like in hardware:
 
-![PD-QRNG-v1](images/pd-qrng-v1.jpg)
+![PD-QRNG-v1](images/assembly-3.jpg)
 
 ### Circuit Details
 
