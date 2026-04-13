@@ -175,7 +175,7 @@ int main() {
         for(int i = 0; i < BATCH_SIZE; i++) {
             current_batch.samples[i] = adc_read();
             // Jitter the timing slightly to prevent phase locking
-            busy_wait_us_32(1 + (adc_read() & 0x03)); 
+            // busy_wait_us_32(1 + (adc_read() & 0x03)); 
         }
         queue_add_blocking(&sample_queue, &current_batch);
     }
