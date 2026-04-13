@@ -73,6 +73,8 @@ flowchart TD
 
 ### Software Overview
 
+The software is available in C and MicroPython. This guide covers the C code, but there is a commented variant in MicroPython located in [python-scripts/QRNG.py](python-scripts/QRNG.py). The only difference is that MicroPython doesn't have SHA512 available, so we use SHA256 instead. 
+
 There are three parts to this system; the PIO program, the ADC acquisition code, and the min-entropy calculation and hashing code communicating over UART over USB.
 
 The Pi Pico is overclocked to its maximum speed of 250MHz. This gives us 125MHz maximum pulse frequency, However, given the laser diode has to completely desaturate between pulses in order for the vacuum fluctuations to be utilized, we pulse once for 4ns, then rest for 20ns. Whilst this ends up requiring a longer delay line, it amplifies the effect we are trying to utilize by guaranteeing desaturation of the emitter. 
