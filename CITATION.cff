@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Kumaran"
+    given-names: "Victoria"
+  - family-names: "Carney"
+    given-names: "Mark"
+    orcid: "https://orcid.org/0000-0001-9372-9033"
+title: "Entropy Loop - A Fully Open Source, Low Cost Phase-Diffusion Quantum Random Number Generator Using Off the Shelf Parts"
+version: 0.1.0
+date-released: 2026-04-13
+url: "https://github.com/QuantumVillage/EntropyLoop"
