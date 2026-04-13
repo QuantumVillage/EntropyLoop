@@ -14,6 +14,10 @@ QV is pleased to be releasing the ‘Entropy Loop’ for world Quantum Day on Ap
 
 Entropy is fast becoming a fundamental resource, especially as AI, simulations, optimizers, cryptography, and computing in general are all changing and accelerating in reach and usefulness. We believe the best way to democratize this technology is to open source a ‘strong minimal viable example’, as we did with quantum sensing, and provide a fully working off the shelf BOM with firmware that passes all major entropy quality tests. This project also serves as an educational/informational demonstration of the benefits of Quantum RNG over regular TRNG and (CS)PRNG technologies.
 
+Here's what the completed build looks like:
+
+![Completed Build Image](images/assembly-3.jpg)
+
 ## Randomness from Vacuum Fluctuations
 
 When a laser diode powers up, there are quantum fluctuations that occur that later determine the laser's current polarization during operation. This means that if we pulse a laser diode on, then off long enough to let it totally power down, and then repeat, each pulse has unique and 'quantum random'-ly determined properties. 
