@@ -482,6 +482,8 @@ This project has showed the potential for low cost, high performance, field-read
 
 ## Acknowledgements 
 
+We are grateful to Eric Case and Dr. Evan Anderson for their help and contributions to validation and testing the design, as well as the Quantum Village community's continued enthusiasm for lo-fi DIY 'bits box' Quantum!
+
 This project was supported by a grant from the Mozilla Foundation to whom we are very grateful.
 
 ![MozillaLogo](images/MoFo_PrimaryLogo_Light_CMYK.jpg)
