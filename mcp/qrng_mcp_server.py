@@ -31,6 +31,7 @@ RECONNECT_DELAY_SEC = float(os.getenv("RECONNECT_DELAY_SEC", "3.0"))
 DEFAULT_WAIT_TIMEOUT_SEC = float(os.getenv("DEFAULT_WAIT_TIMEOUT_SEC", "10.0"))
 
 # Local-only by default. Add more origins as needed if you later expose this to browser clients.
+# http://localhost:6274 is for `npx @modelcontextprotocol/inspector` traffic.
 ALLOWED_ORIGINS = {
     origin.strip()
     for origin in os.getenv(
