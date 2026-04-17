@@ -1,0 +1,18 @@
+[Unit]
+Description=QRNG USB MCP Server
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/opt/qrng-mcp
+Environment=USB_DEVICE=/dev/ttyACM0
+Environment=USB_BAUD=115200
+Environment=HOST=127.0.0.1
+Environment=PORT=8000
+ExecStart=/opt/qrng-mcp/.venv/bin/python /opt/qrng-mcp/qrng_mcp_server.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

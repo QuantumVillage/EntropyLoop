@@ -1,0 +1,5 @@
+mcp[cli]
+pyserial
+pydantic>=2
+starlette
+uvicorn
