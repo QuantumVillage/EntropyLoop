@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__qrng__get_server_status",
-      "mcp__qrng__get_recent_qrng_samples",
-      "Bash(python3 -m py_compile qrng_mcp_server.py)"
-    ]
-  }
-}
