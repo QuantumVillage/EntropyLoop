@@ -95,4 +95,4 @@ single-path firmware, PIO square wave driver, lagged derivative entropy estimato
 and SHA-512 pipeline are preserved unchanged. The dual-path adds a second measurement
 channel on top without modifying the core architecture.
 
-Target for DEF CON presentation demonstrating FiberRanger + KerberGhosting.
+
