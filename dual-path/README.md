@@ -35,7 +35,7 @@ channels and cancels in the subtraction. What remains is the quantum interferenc
 | 2.1 | ADS1115 16-bit, 860 SPS, PIO I2C | 3.7–4.4 | 5.1–5.5 | Superseded |
 | 3.0 | AD7606 16-bit, 200k SPS, SPI | ~6.45 peak | — | Drift issue |
 | 3.1 | AD7606 + DC blocker + oversampling | stable | 5.4–5.9 | Production |
-| 3.2 | AD7606 + busy-race fix | **6.2–6.9 sustained** | 5.9–6.2 | **Current** |
+| 3.2 | AD7606 + busy-race fix | **5.9.–6.5 sustained** | 5.4–5.9 | **Current** |
 
 ## Additional Hardware Required
 
