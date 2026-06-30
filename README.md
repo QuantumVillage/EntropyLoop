@@ -203,7 +203,7 @@ The circuit schematic for the output level shifter looks like this:
 
 The full BOM is as follows:
 
-1. 1x PAIR Fiber Transcievers - e.g. https://www.aliexpress.com/item/1005005938443917.html
+1. 1x PAIR Fiber Transcievers - e.g. https://www.aliexpress.com/item/1005010400110455.html
 1. 1x 5m fiber patch cable - e.g. https://www.aliexpress.com/item/1005008760544957.html
 1. 2x 1x2 50/50 fiber splitters - e.g. https://www.aliexpress.com/item/1005006647801937.html 
 1. 3x SC/APC Fiber Couplers - e.g. https://www.aliexpress.com/item/1005008790973325.html
