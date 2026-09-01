@@ -17,16 +17,26 @@
 // ----------------------------------------------------------------------------
 // CONFIGURATION
 // ----------------------------------------------------------------------------
-#define TARGET_FREQ_KHZ   250000  // 250 MHz System Clock
+// #define TARGET_FREQ_KHZ   250000  // 250 MHz System Clock
+// new clock options: 244890, 244800, 244000
+#define TARGET_FREQ_KHZ   244890  // new freq aligns with 5m of glass fiber better
+                                  // 24.5ns delay in 5m glass...
+                                  //    so 4.0833ns per clock step for 6x 
+                                  //    so 244.89MHz target freq.
 #define PIO_PIN           0       // Square Wave Output
+#define SECOND_PIO_PIN    1       // second square wave
 #define ADC_PIN           26      // ADC Input (GPIO 26)
+#define SECOND_ADC_PIN    27      // second ADC input
 #define ADC_INPUT         0       // ADC Channel 0 matches GPIO 26
+#define SECOND_ADC_INPUT  1       // ADC Channel 1 for CPIO 26
 #define BATCH_SIZE        1024    // Samples per batch
 #define LAG_DEPTH         12      // Compare current sample vs 4/8/12 samples ago
+#define MIN_ENTROPY_FLOOR 1.6f    // Sets min level that won't be emitted by the output
 
 // Structure to pass data between cores
 typedef struct {
     uint16_t samples[BATCH_SIZE];
+    uint8_t  channel;   // 0 = ADC_INPUT, 1 = SECOND_ADC_INPUT. Whole batch is one channel.
 } adc_batch_t;
 
 // Thread-safe queue for inter-core communication
@@ -61,13 +71,15 @@ void core1_entry() {
     // --- RING BUFFER HISTORY ---
     // We store the last 'LAG_DEPTH' samples here.
     // Comparing T vs T-12 breaks the correlation of the slow laser pulse shape.
-    static uint16_t history[LAG_DEPTH] = {0}; 
-    static uint8_t hist_head = 0;
+    // One buffer per channel, so the lag never straddles a channel boundary.
+    static uint16_t history[2][LAG_DEPTH] = {{0}};
+    static uint8_t hist_head[2] = {0};
     // ---------------------------
 
     while (true) {
         // 1. Wait for data from Core 0
         queue_remove_blocking(&sample_queue, &batch);
+        const uint8_t ch = batch.channel & 1;
 
         // Reset diagnostics
         memset(counts, 0, sizeof(counts));
@@ -89,13 +101,13 @@ void core1_entry() {
 
             // --- LAGGED DERIVATIVE CALCULATION ---
             // 1. Get the "Old" value from history
-            uint16_t old_val = history[hist_head];
-            
+            uint16_t old_val = history[ch][hist_head[ch]];
+
             // 2. Overwrite history with current value
-            history[hist_head] = val;
-            
+            history[ch][hist_head[ch]] = val;
+
             // 3. Advance the ring buffer head
-            hist_head = (hist_head + 1) % LAG_DEPTH;
+            hist_head[ch] = (hist_head[ch] + 1) % LAG_DEPTH;
 
             // 4. Calculate Delta against the OLD value
             // We add 2048 to center the result.
@@ -125,13 +137,20 @@ void core1_entry() {
         }
 
         // Hashing (SHA-512) - Note: We hash the RAW samples, not the derivative!
-        crypto_hash((unsigned char*)batch.samples, sizeof(batch.samples), hash_out_1);
-        crypto_hash(hash_out_1, 64, hash_out_2);
+        // Two DISJOINT halves of the batch, so the two blocks are independent.
+        const size_t half = sizeof(batch.samples) / 2;
+        crypto_hash((unsigned char*)batch.samples, half, hash_out_1);
+        crypto_hash((unsigned char*)batch.samples + half, half, hash_out_2);
 
         // Output
-        printf("H_min: %.4f | R: %4d | Data: \n", min_entropy, dynamic_range);
-        print_hex(hash_out_1, 64);
-        print_hex(hash_out_2, 64); 
+        // printf("H_min: %.4f | R: %4d | Data: \n", min_entropy, dynamic_range);
+        printf("H_min: %.4f | R: %4d | CH%u | Data: \n", min_entropy, dynamic_range, ch);
+        // Print data only when the estimate backs it. A squelched or collapsed batch
+        // emits its header and nothing else, rather than hex a consumer would scrape.
+        if (min_entropy >= MIN_ENTROPY_FLOOR) {
+            print_hex(hash_out_1, 64);
+            print_hex(hash_out_2, 64);
+        }
     }
 }
 
@@ -156,10 +175,14 @@ int main() {
     uint sm = pio_claim_unused_sm(pio, true);
     uint offset = pio_add_program(pio, &square_wave_program);
     square_wave_program_init(pio, sm, offset, PIO_PIN);
+    // But what about a second square-ish wave? 
+    uint sm2 = pio_claim_unused_sm(pio, true);
+    square_wave_program_init(pio, sm2, offset, SECOND_PIO_PIN);
 
     // 4. Setup ADC
     adc_init();
     adc_gpio_init(ADC_PIN);
+    adc_gpio_init(SECOND_ADC_PIN);
     adc_select_input(ADC_INPUT);
 
     // 5. Launch Core 1
@@ -171,12 +194,22 @@ int main() {
     // 6. Main Loop
     static adc_batch_t current_batch;
     
+    uint8_t ch = 0;
+
     while (true) {
+        adc_select_input(ch ? SECOND_ADC_INPUT : ADC_INPUT);
+        // Throw away two conversions so the sample-and-hold settles to the new
+        // channel through the divider/buffer impedance before we keep anything.
+        (void)adc_read();
+        (void)adc_read();
+
         for(int i = 0; i < BATCH_SIZE; i++) {
             current_batch.samples[i] = adc_read();
             // Jitter the timing slightly to prevent phase locking
-            // busy_wait_us_32(1 + (adc_read() & 0x03)); 
+            // busy_wait_us_32(1 + (adc_read() & 0x03));
         }
+        current_batch.channel = ch;
         queue_add_blocking(&sample_queue, &current_batch);
+        ch ^= 1;
     }
 }
