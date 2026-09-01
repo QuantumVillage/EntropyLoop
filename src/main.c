@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 // #define TARGET_FREQ_KHZ   250000  // 250 MHz System Clock
 // new clock options: 244890, 244800, 244000
-#define TARGET_FREQ_KHZ   244890  // new freq aligns with 5m of glass fiber better
+#define TARGET_FREQ_KHZ   244800  // new freq aligns with 5m of glass fiber better
                                   // 24.5ns delay in 5m glass...
                                   //    so 4.0833ns per clock step for 6x 
                                   //    so 244.89MHz target freq.
