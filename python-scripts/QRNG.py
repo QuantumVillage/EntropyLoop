@@ -9,7 +9,7 @@ import uhashlib
 # ----------------------------------------------------------------------------
 # CONFIGURATION
 # ----------------------------------------------------------------------------
-TARGET_FREQ = 250_000_000  # 250 MHz System Clock
+TARGET_FREQ = 244_800_000  # 244.8 MHz System Clock
 BATCH_SIZE = 1024          # Samples per batch
 LAG_DEPTH = 12             # Compare current sample vs 12 samples ago
 
@@ -115,7 +115,7 @@ def core1_entry():
 # CORE 0: Hardware Setup & Acquisition
 # ----------------------------------------------------------------------------
 def main():
-    # 1. Overclock to 250 MHz
+    # 1. Overclock to 244.8 MHz
     machine.freq(TARGET_FREQ)
     
     # 2. Launch Core 1

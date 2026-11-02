@@ -17,7 +17,7 @@
 // ----------------------------------------------------------------------------
 // CONFIGURATION
 // ----------------------------------------------------------------------------
-#define TARGET_FREQ_KHZ   250000  // 250 MHz System Clock
+#define TARGET_FREQ_KHZ   244800  // 244.8 MHz System Clock
 #define PIO_PIN           0       // Square Wave Output
 #define ADC_PIN           26      // ADC Input (GPIO 26)
 #define ADC_INPUT         0       // ADC Channel 0 matches GPIO 26
@@ -139,7 +139,7 @@ void core1_entry() {
 // CORE 0: Hardware Setup & Acquisition
 // ----------------------------------------------------------------------------
 int main() {
-    // 1. Overclock to 250 MHz
+    // 1. Overclock to 244.8 MHz
     vreg_set_voltage(VREG_VOLTAGE_1_25);
     sleep_ms(10);
     set_sys_clock_khz(TARGET_FREQ_KHZ, true);

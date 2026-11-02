@@ -85,7 +85,15 @@ The software is available in C and MicroPython. This guide covers the C code, bu
 
 There are three parts to this system; the PIO program, the ADC acquisition code, and the min-entropy calculation and hashing code communicating over UART over USB.
 
-The Pi Pico is overclocked to its maximum speed of 250MHz. This gives us 125MHz maximum pulse frequency, However, given the laser diode has to completely desaturate between pulses in order for the vacuum fluctuations to be utilized, we pulse once for 4ns, then rest for 20ns. Whilst this ends up requiring a longer delay line, it amplifies the effect we are trying to utilize by guaranteeing desaturation of the emitter. 
+The Pi Pico is overclocked to 244.8MHz to synchronize the laser pulse cycle with the propagation delay of light through a 5-meter fiber optic cable.
+
+The timing is based on the speed of light in the fiber, calculated using its refractive index. (For Corning SMF-28 fiber, the refractive index is approximately 1.4682 at 1550 nm and 1.4676 at 1310 nm.) This results in a propagation delay of approximately 24.49 ns over 5 meters at either wavelength.
+
+The PIO pulse cycle consists of six clock cycles: one cycle with the laser on, followed by five cycles with the laser off to allow the laser diode to fully desaturate before the next pulse. Matching this six-cycle period to the fiber propagation delay produces an ideal system clock frequency of approximately 245 MHz.
+
+The Pico is therefore configured to operate at 244.8 MHz, the nearest achievable clock frequency to the calculated optimum. At this frequency, each clock cycle lasts approximately 4.085 ns, producing a laser-on pulse of 4.085 ns followed by a laser-off interval of 20.425 ns. The complete pulse cycle is 24.51 ns, closely matching the fiber's optical propagation delay of 24.49 ns.
+
+This timing is intended to ensure that the laser diode has sufficient time to desaturate between pulses, allowing vacuum fluctuations to contribute to the randomness of the emitted photons while maintaining synchronization with the optical delay line.
 
 The PIO code sets is as follows:
 
