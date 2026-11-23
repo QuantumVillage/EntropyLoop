@@ -10,6 +10,7 @@ pico_sdk_init()
 
 add_executable(entropy_gen
     main.c
+    health_tests.c
 )
 
 # 1. Generate PIO header

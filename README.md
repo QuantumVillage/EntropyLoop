@@ -425,6 +425,8 @@ This is a pretty reliable showing in the NIST STS tests!
 
 ## Sample Serial Output
 
+The firmware also runs SP 800-90B start-up and continuous health tests (Repetition Count and Adaptive Proportion) on the raw samples before hashing. A batch that fails is dropped and replaced by a `HEALTH: FAIL ...` line. See [docs/HEALTH_TESTS.md](docs/HEALTH_TESTS.md).
+
 Here is some example output from the UART connection. `H_min` is the output of the min-entropy calculation. When scaled to 8 bits, ~6-6.4 is considered generally good. `R` is the range, and `Data` precedes two lines of `SHA512` hashes that are the condensed versions of the input entropy pools:
 
 ```bash

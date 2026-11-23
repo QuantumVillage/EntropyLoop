@@ -45,7 +45,8 @@ ALLOWED_ORIGINS = {
 SAMPLE_RE = re.compile(
     r"H_min:\s*(?P<hmin>\d+(?:\.\d+)?)\s*\|\s*"
     r"R:\s*(?P<range>\d+)\s*\|\s*"
-    r"Data:\s*(?P<data>(?:[0-9a-fA-F]{2}|\s)+?)(?=\s*H_min:|$)"
+    r"(?:CH(?P<ch>\d+)\s*\|\s*)?"
+    r"Data:\s*(?P<data>(?:[0-9a-fA-F]{2}|\s)+?)(?=\s*(?:H_min:|HEALTH:)|$)"
 )
 
 
