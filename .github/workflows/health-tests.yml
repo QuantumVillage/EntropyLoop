@@ -1,0 +1,20 @@
+name: health-tests
+
+on:
+  push:
+    paths: ["src/health_*", "tests/**", "tools/ht_cutoffs.py", ".github/workflows/health-tests.yml"]
+  pull_request:
+    paths: ["src/health_*", "tests/**", "tools/ht_cutoffs.py", ".github/workflows/health-tests.yml"]
+  workflow_dispatch:
+
+jobs:
+  host-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cutoff table is up to date
+        run: python3 tools/ht_cutoffs.py --table --c-header | diff - src/health_cutoffs.h
+      - name: Unit tests
+        run: make -C tests test
+      - name: Fault-injection demo
+        run: make -C tests demo

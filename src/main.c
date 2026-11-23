@@ -13,6 +13,7 @@
 #include "mbedtls/sha512.h"
 
 #include "squarewave.pio.h"
+#include "health_tests.h"
 
 // ----------------------------------------------------------------------------
 // CONFIGURATION
@@ -32,6 +33,13 @@
 #define BATCH_SIZE        1024    // Samples per batch
 #define LAG_DEPTH         12      // Compare current sample vs 4/8/12 samples ago
 #define MIN_ENTROPY_FLOOR 1.6f    // Sets min level that won't be emitted by the output
+
+// SP 800-90B continuous health tests (see docs/HEALTH_TESTS.md), run per channel.
+// Claimed min-entropy per raw 12-bit sample, whole bits (1..8). Lower is more
+// tolerant (fewer false alarms), higher is more sensitive. 4 is deliberately
+// below what an open 800-90B assessment measured for one device; assess your
+// own build before raising it.
+#define HT_CLAIMED_H      4
 
 // Structure to pass data between cores
 typedef struct {
@@ -76,10 +84,31 @@ void core1_entry() {
     static uint8_t hist_head[2] = {0};
     // ---------------------------
 
+    // --- HEALTH TESTS (SP 800-90B 4.3 / 4.4), one state per channel ---
+    // Start-up test: each channel's first batch (1024 samples) must pass both
+    // tests before that channel produces output. Start-up samples are discarded.
+    static ht_state_t ht[2];
+    bool ht_started[2] = {false, false};
+    ht_init_for_h(&ht[0], HT_CLAIMED_H);
+    ht_init_for_h(&ht[1], HT_CLAIMED_H);
+    // ---------------------------
+
     while (true) {
         // 1. Wait for data from Core 0
         queue_remove_blocking(&sample_queue, &batch);
         const uint8_t ch = batch.channel & 1;
+
+        if (!ht_started[ch]) {
+            if (ht_startup(&ht[ch], batch.samples, BATCH_SIZE, 0xFFF)) {
+                ht_started[ch] = true;
+                printf("HEALTH: startup OK | CH%u | H: %d | RCT C: %lu | APT C: %lu/%lu\n",
+                       ch, HT_CLAIMED_H, (unsigned long)ht[ch].rct_cutoff,
+                       (unsigned long)ht[ch].apt_cutoff, (unsigned long)ht[ch].apt_window);
+            } else {
+                printf("HEALTH: startup FAIL | CH%u | retrying\n", ch);
+            }
+            continue;
+        }
 
         // Reset diagnostics
         memset(counts, 0, sizeof(counts));
@@ -89,6 +118,7 @@ void core1_entry() {
         uint16_t min_val = 4096; 
         uint16_t max_val = 0;    
         // ---------------------------
+        unsigned ht_result = HT_OK;
 
         for(int i = 0; i < BATCH_SIZE; i++) {
             // Mask to ensure we only look at 12 bits
@@ -98,6 +128,9 @@ void core1_entry() {
             if (val < min_val) min_val = val;
             if (val > max_val) max_val = val;
             // ---------------------------
+
+            // Continuous health tests on the raw sample
+            ht_result |= ht_feed(&ht[ch], val);
 
             // --- LAGGED DERIVATIVE CALCULATION ---
             // 1. Get the "Old" value from history
@@ -134,6 +167,18 @@ void core1_entry() {
         // Force entropy to 0.0 to indicate "Unsafe".
         if (dynamic_range < 200) {
             min_entropy = 0.0f;
+        }
+
+        // --- HEALTH GATE ---
+        // A batch with any health-test failure is discarded, never hashed or
+        // output. The line starts with "HEALTH:" so H_min parsers skip it.
+        if (ht_result != HT_OK) {
+            printf("HEALTH: FAIL%s%s | R: %4d | CH%u | RCT fails: %lu | APT fails: %lu\n",
+                   (ht_result & HT_RCT_FAIL) ? " RCT" : "",
+                   (ht_result & HT_APT_FAIL) ? " APT" : "",
+                   dynamic_range, ch,
+                   (unsigned long)ht[ch].rct_failures, (unsigned long)ht[ch].apt_failures);
+            continue;
         }
 
         // Hashing (SHA-512) - Note: We hash the RAW samples, not the derivative!
